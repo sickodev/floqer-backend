@@ -5,10 +5,11 @@ import (
 	"os"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/joho/godotenv"
+	model "github.com/sickodev/floqer-backend/chat"
 	"github.com/sickodev/floqer-backend/store"
-	"github.com/gofiber/fiber/v2/middleware/cors"
 )
 
 func main(){
@@ -34,6 +35,7 @@ func main(){
   v1 := api.Group("/v1")
 
   v1.Get("/store",store.GetData)
+  v1.Post("/model", model.GenerateResponse)
 
   log.Fatal(app.Listen(os.Getenv("PORT")))
 }
