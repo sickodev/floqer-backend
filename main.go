@@ -7,35 +7,31 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"
-	"github.com/joho/godotenv"
 	model "github.com/sickodev/floqer-backend/chat"
 	"github.com/sickodev/floqer-backend/store"
 )
 
-func main(){
-  if err := godotenv.Load(); err != nil{
-    log.Fatalf("Error loading env file")
-  }
+func main() {
 
-  app := fiber.New(fiber.Config{
-    Prefork: true,
-    ServerHeader: "Floqer-Backend",
-  })
+	app := fiber.New(fiber.Config{
+		Prefork:      true,
+		ServerHeader: "Floqer-Backend",
+	})
 
-  app.Use(logger.New())
-  app.Use(cors.New(cors.Config{
-    AllowMethods: "GET, POST",
-    ExposeHeaders: "Content-Type",
-  }))
+	app.Use(logger.New())
+	app.Use(cors.New(cors.Config{
+		AllowMethods:  "GET, POST",
+		ExposeHeaders: "Content-Type",
+	}))
 
-  api := app.Group("/api")
+	api := app.Group("/api")
 
-  // VERSION 1 SETTINGS
+	// VERSION 1 SETTINGS
 
-  v1 := api.Group("/v1")
+	v1 := api.Group("/v1")
 
-  v1.Get("/store",store.GetData)
-  v1.Post("/model", model.GenerateResponse)
+	v1.Get("/store", store.GetData)
+	v1.Post("/model", model.GenerateResponse)
 
-  log.Fatal(app.Listen(os.Getenv("PORT")))
+	log.Fatal(app.Listen(os.Getenv("PORT")))
 }
